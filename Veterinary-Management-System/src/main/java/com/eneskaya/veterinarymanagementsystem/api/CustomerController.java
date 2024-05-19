@@ -2,6 +2,7 @@ package com.eneskaya.veterinarymanagementsystem.api;
 
 import com.eneskaya.veterinarymanagementsystem.business.abstracts.ICustomerService;
 import com.eneskaya.veterinarymanagementsystem.entities.Customer;
+import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
@@ -16,9 +17,12 @@ public class CustomerController {
         this.customerService = customerService;
     }
 
+
+
+    // Use request,response dto we can change easily request response
     @PostMapping()
     @ResponseStatus(HttpStatus.CREATED)
-    public Customer save(@RequestBody Customer customer) {
+    public Customer save(@Valid @RequestBody Customer customer) {
         return this.customerService.save(customer);
     }
 
