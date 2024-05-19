@@ -3,6 +3,7 @@ package com.eneskaya.veterinarymanagementsystem.api;
 import com.eneskaya.veterinarymanagementsystem.business.abstracts.ICustomerService;
 import com.eneskaya.veterinarymanagementsystem.core.config.modelMapper.IModelMapperService;
 import com.eneskaya.veterinarymanagementsystem.core.result.ResultData;
+import com.eneskaya.veterinarymanagementsystem.core.utilies.ResultHelper;
 import com.eneskaya.veterinarymanagementsystem.dto.request.customer.CustomerSaveRequest;
 import com.eneskaya.veterinarymanagementsystem.dto.response.customer.CustomerResponse;
 import com.eneskaya.veterinarymanagementsystem.entities.Customer;
@@ -37,7 +38,8 @@ public class CustomerController {
 
         CustomerResponse customerResponse = this.modelMapper.forResponse().map(saveCustomer,CustomerResponse.class);
         // create and return ResultData
-        return new ResultData<>(true,"Data Added","201",customerResponse);
+        //return new ResultData<>(true,"Data Added","201",customerResponse);
+        return ResultHelper.createData(customerResponse);
     }
 
 }

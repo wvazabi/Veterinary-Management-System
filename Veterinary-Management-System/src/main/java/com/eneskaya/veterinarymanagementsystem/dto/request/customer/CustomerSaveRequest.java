@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class CustomerSaveRequest {
-    @NotNull
+    @NotNull(message = "Data must not be null")
     private String name;
 
     private String phone;
