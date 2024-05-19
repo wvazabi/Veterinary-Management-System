@@ -42,4 +42,12 @@ public class CustomerController {
         return ResultHelper.createData(customerResponse);
     }
 
+    @GetMapping("/{id}")
+    @ResponseStatus(HttpStatus.OK)
+    public ResultData<CustomerResponse> get(@PathVariable("id") int id) {
+        Customer customer = this.customerService.get(id);
+        CustomerResponse customerResponse = this.modelMapper.forResponse().map(customer, CustomerResponse.class);
+        return ResultHelper.successData(customerResponse);
+    }
+
 }
