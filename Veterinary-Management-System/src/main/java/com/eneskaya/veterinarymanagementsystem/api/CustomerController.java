@@ -46,6 +46,7 @@ public class CustomerController {
         return ResultHelper.createData(customerResponse);
     }
 
+    //Get by id customer
     @GetMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
     public ResultData<CustomerResponse> get(@PathVariable("id") int id) {
@@ -54,6 +55,17 @@ public class CustomerController {
         return ResultHelper.successData(customerResponse);
     }
 
+    // get by name
+
+    @GetMapping("/name={name}")
+    @ResponseStatus(HttpStatus.OK)
+    public ResultData<CustomerResponse> getByName(@PathVariable("name") String name) {
+        Customer customer = this.customerService.findByName(name);
+        CustomerResponse customerResponse = this.modelMapper.forResponse().map(customer, CustomerResponse.class);
+        return ResultHelper.successData(customerResponse);
+    }
+
+    // find all customer with pagination
     @GetMapping()
     @ResponseStatus(HttpStatus.OK)
     public ResultData<CursorResponse<CustomerResponse>> cursor(
@@ -67,6 +79,8 @@ public class CustomerController {
                 .map(customer -> this.modelMapper.forResponse().map(customer, CustomerResponse.class));
         return ResultHelper.cursor(customerResponsePage);
     }
+
+
 
     @PutMapping()
     @ResponseStatus(HttpStatus.OK)

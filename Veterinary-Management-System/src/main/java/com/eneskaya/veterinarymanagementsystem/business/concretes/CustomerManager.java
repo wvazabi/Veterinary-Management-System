@@ -31,6 +31,11 @@ public class CustomerManager implements ICustomerService {
     }
 
     @Override
+    public Customer findByName(String name) {
+        return this.customerRepo.findByName(name).orElseThrow(() -> new NotFoundException(Msg.NOT_FOUND));
+    }
+
+    @Override
     public Page<Customer> cursor(int page, int pageSize) {
         Pageable pageable = PageRequest.of(page,pageSize);
         return this.customerRepo.findAll(pageable);
@@ -41,6 +46,8 @@ public class CustomerManager implements ICustomerService {
         this.get((int) customer.getId());
         return this.customerRepo.save(customer);
     }
+
+
 
     @Override
     public boolean delete(int id) {
