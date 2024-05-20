@@ -16,6 +16,6 @@ public interface IAnimalService {
     Animal update(Animal animal);
     boolean delete(int id);
 
-    List<Animal> findByCustomerNameContaining(String customerName);
+    List<Animal> getAnimalsByCustomerName(String customerName);
 
 }

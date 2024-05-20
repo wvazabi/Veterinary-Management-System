@@ -19,6 +19,9 @@ import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 @RestController
 @RequestMapping("/v1/animals")
 public class AnimalController {
@@ -91,6 +94,16 @@ public class AnimalController {
         Animal animal = this.animalService.findByName(name);
         AnimalResponse animalResponse = this.modelMapper.forResponse().map(animal,AnimalResponse.class);
         return ResultHelper.successData(animalResponse);
+    }
+
+    @GetMapping("/customer_name={customer_name}")
+    @ResponseStatus(HttpStatus.OK)
+    public ResultData<List<AnimalResponse>> getAnimalsByCustomerName(@PathVariable("customer_name") String customerName) {
+        List<Animal>  animalList = this.animalService.getAnimalsByCustomerName(customerName);
+        List<AnimalResponse> animalResponseList = animalList.stream().map(animal -> this.modelMapper.
+                forResponse().map(animal,AnimalResponse.class)).collect(Collectors.toList());
+
+        return ResultHelper.successData(animalResponseList);
     }
 
 

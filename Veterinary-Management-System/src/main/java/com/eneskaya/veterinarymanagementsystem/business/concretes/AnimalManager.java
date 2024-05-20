@@ -58,11 +58,11 @@ public class AnimalManager implements IAnimalService {
     }
 
     @Override
-    public List<Animal> findByCustomerNameContaining(String customerName) {
+    public List<Animal> getAnimalsByCustomerName(String customerName) {
         List<Animal> animalList =  this.animalRepo.findByCustomerNameContaining(customerName);
 
         if(animalList.isEmpty()) {
-            throw new NotFoundException(Msg.NOT_FOUND);
+            throw new NotFoundException(Msg.NOT_FOUND_CSTMR);
         }
 
         return  animalList;
