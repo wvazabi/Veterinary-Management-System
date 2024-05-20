@@ -2,13 +2,17 @@ package com.eneskaya.veterinarymanagementsystem.api;
 
 import com.eneskaya.veterinarymanagementsystem.business.abstracts.ICustomerService;
 import com.eneskaya.veterinarymanagementsystem.core.config.modelMapper.IModelMapperService;
+import com.eneskaya.veterinarymanagementsystem.core.result.Result;
 import com.eneskaya.veterinarymanagementsystem.core.result.ResultData;
 import com.eneskaya.veterinarymanagementsystem.core.utilies.ResultHelper;
 import com.eneskaya.veterinarymanagementsystem.dto.request.customer.CustomerSaveRequest;
+import com.eneskaya.veterinarymanagementsystem.dto.request.customer.CustomerUpdateRequest;
+import com.eneskaya.veterinarymanagementsystem.dto.response.CursorResponse;
 import com.eneskaya.veterinarymanagementsystem.dto.response.customer.CustomerResponse;
 import com.eneskaya.veterinarymanagementsystem.entities.Customer;
 import jakarta.validation.Valid;
 import jdk.jfr.Category;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
@@ -48,6 +52,36 @@ public class CustomerController {
         Customer customer = this.customerService.get(id);
         CustomerResponse customerResponse = this.modelMapper.forResponse().map(customer, CustomerResponse.class);
         return ResultHelper.successData(customerResponse);
+    }
+
+    @GetMapping()
+    @ResponseStatus(HttpStatus.OK)
+    public ResultData<CursorResponse<CustomerResponse>> cursor(
+          @RequestParam(name = "page", required = false, defaultValue = "0") int page,
+          @RequestParam(name = "pageSize", required = false, defaultValue = "10") int pageSize
+
+    ) {
+
+        Page<Customer> customerPage = this.customerService.cursor(page, pageSize);
+        Page<CustomerResponse> customerResponsePage = customerPage
+                .map(customer -> this.modelMapper.forResponse().map(customer, CustomerResponse.class));
+        return ResultHelper.cursor(customerResponsePage);
+    }
+
+    @PutMapping()
+    @ResponseStatus(HttpStatus.OK)
+    public ResultData<CustomerResponse> update(@Valid @RequestBody CustomerUpdateRequest customerUpdateRequest) {
+        Customer updateCustomer = this.modelMapper.forRequest().map(customerUpdateRequest, Customer.class);
+        this.customerService.update(updateCustomer);
+        CustomerResponse customerResponse = this.modelMapper.forResponse().map(updateCustomer, CustomerResponse.class);
+        return ResultHelper.successData(customerResponse);
+    }
+
+    @DeleteMapping("/{id}")
+    @ResponseStatus(HttpStatus.OK)
+    public Result delete(@PathVariable("id") int id) {
+        this.customerService.delete(id);
+        return ResultHelper.ok();
     }
 
 }

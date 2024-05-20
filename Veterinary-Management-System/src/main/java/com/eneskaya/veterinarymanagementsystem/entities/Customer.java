@@ -17,7 +17,7 @@ public class Customer {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "customer_id", columnDefinition = "serial")
-    private int id;
+    private long id;
 
     @NotNull
     @Column(name = "customer_name")

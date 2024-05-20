@@ -1,5 +1,6 @@
-package com.eneskaya.veterinarymanagementsystem.core.config.modelMapper;
+package com.eneskaya.veterinarymanagementsystem.core.config;
 
+import com.eneskaya.veterinarymanagementsystem.core.exception.NotFoundException;
 import com.eneskaya.veterinarymanagementsystem.core.result.Result;
 import com.eneskaya.veterinarymanagementsystem.core.result.ResultData;
 import com.eneskaya.veterinarymanagementsystem.core.utilies.ResultHelper;
@@ -17,8 +18,9 @@ import java.util.stream.Collectors;
 //Exceptions are related to config, designed catch and response exception
 @ControllerAdvice
 public class GlobalExceptionHandler {
-    @ExceptionHandler(ChangeSetPersister.NotFoundException.class)
-    public ResponseEntity<Result> handleNotFoundException(ChangeSetPersister.NotFoundException e) {
+    @ExceptionHandler(NotFoundException.class)
+    public ResponseEntity<Result> handleNotFoundException(NotFoundException e) {
+        // mesajı al response entity oluştur
         return new ResponseEntity<>(ResultHelper.notFound(e.getMessage()), HttpStatus.NOT_FOUND);
     }
 

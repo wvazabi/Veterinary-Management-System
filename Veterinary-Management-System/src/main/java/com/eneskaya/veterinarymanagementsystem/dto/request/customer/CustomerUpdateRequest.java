@@ -1,6 +1,7 @@
-package com.eneskaya.veterinarymanagementsystem.dto.response.customer;
+package com.eneskaya.veterinarymanagementsystem.dto.request.customer;
 
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Positive;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -8,12 +9,12 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class CustomerResponse {
+public class CustomerUpdateRequest {
 
-    // There is no validation because we send the information
-
+    @Positive(message = "ID should be positive number")
     private long id;
 
+    @NotNull(message = "Data must not be null")
     private String name;
 
     private String phone;

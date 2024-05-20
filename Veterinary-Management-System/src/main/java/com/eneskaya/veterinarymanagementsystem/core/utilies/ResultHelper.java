@@ -2,6 +2,7 @@ package com.eneskaya.veterinarymanagementsystem.core.utilies;
 
 import com.eneskaya.veterinarymanagementsystem.core.result.Result;
 import com.eneskaya.veterinarymanagementsystem.core.result.ResultData;
+import com.eneskaya.veterinarymanagementsystem.dto.response.CursorResponse;
 import org.springframework.data.domain.Page;
 
 // Result Helper class, generate this class for write less code
@@ -25,14 +26,14 @@ public class ResultHelper {
         return new Result(true, msg, "404");
     }
 
-//    public static <T> ResultData<CursorResponse<T>> cursor(Page<T> pageData) {
-//        CursorResponse<T> cursor = new CursorResponse<>();
-//        cursor.setItems(pageData.getContent());
-//        cursor.setPageSize(pageData.getSize());
-//        cursor.setPageNumber(pageData.getNumber());
-//        cursor.setTotalElements(pageData.getTotalElements());
-//
-//        return ResultHelper.success(cursor);
-//    }
+    public static <T> ResultData<CursorResponse<T>> cursor(Page<T> pageData) {
+        CursorResponse<T> cursor = new CursorResponse<>();
+        cursor.setItems(pageData.getContent());
+        cursor.setPageSize(pageData.getSize());
+        cursor.setPageNumber(pageData.getNumber());
+        cursor.setTotalElements(pageData.getTotalElements());
+
+        return ResultHelper.successData(cursor);
+    }
 
 }
