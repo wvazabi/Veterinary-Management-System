@@ -30,7 +30,7 @@ public class Doctor {
     @Email
     private String mail;
 
-    @Column(name = "doctor_address", nullable = false)
+    @Column(name = "doctor_address")
     private String address;
 
     @Column(name = "doctor_city", nullable = false)

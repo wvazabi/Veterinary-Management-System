@@ -41,7 +41,7 @@ public class DoctorManager implements IDoctorService {
 
     @Override
     public Doctor update(Doctor doctor) {
-        this.get(Math.toIntExact(doctor.getId()));
+        //this.get(Math.toIntExact((doctor.getId())));
         return this.doctorRepo.save(doctor);
     }
 

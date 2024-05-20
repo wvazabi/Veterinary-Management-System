@@ -79,11 +79,11 @@ public class AnimalController {
 
     @PutMapping()
     @ResponseStatus(HttpStatus.OK)
-    public ResultData<AnimalResponse> update(@Valid @RequestBody AnimalUpdateRequest animalUpdateRequest ) {
-        System.out.println("Received payload: " + animalUpdateRequest);
+    public ResultData<AnimalResponse> update(@Valid @RequestBody AnimalUpdateRequest animalUpdateRequest) {
         Animal updateAnimal = this.modelMapper.forRequest().map(animalUpdateRequest, Animal.class);
-        this.animalService.update(updateAnimal);
-        AnimalResponse animalResponse = this.modelMapper.forResponse().map(updateAnimal, AnimalResponse.class);
+        Animal updatedAnimal = this.animalService.update(updateAnimal);
+        updatedAnimal.setCustomer(customerService.get((int) updatedAnimal.getCustomer().getId()));
+        AnimalResponse animalResponse = this.modelMapper.forResponse().map(updatedAnimal, AnimalResponse.class);
         return ResultHelper.successData(animalResponse);
     }
 
