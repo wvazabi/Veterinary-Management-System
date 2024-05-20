@@ -30,7 +30,7 @@ public class AnimalManager implements IAnimalService {
 
     @Override
     public Animal get(int id) {
-        return this.animalRepo.findById(id).orElseThrow(() -> new NotFoundException(Msg.NOT_FOUND));
+        return this.animalRepo.findById(id).orElseThrow(() -> new NotFoundException(Msg.NOT_FOUND_ANIMAL));
     }
 
     @Override

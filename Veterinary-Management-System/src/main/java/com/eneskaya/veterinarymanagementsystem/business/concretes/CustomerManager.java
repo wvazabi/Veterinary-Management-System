@@ -32,7 +32,7 @@ public class CustomerManager implements ICustomerService {
 
     @Override
     public Customer get(int id) {
-        return this.customerRepo.findById(id).orElseThrow(() -> new NotFoundException(Msg.NOT_FOUND));
+        return this.customerRepo.findById(id).orElseThrow(() -> new NotFoundException(Msg.NOT_FOUND_CSTMR));
     }
 
     @Override

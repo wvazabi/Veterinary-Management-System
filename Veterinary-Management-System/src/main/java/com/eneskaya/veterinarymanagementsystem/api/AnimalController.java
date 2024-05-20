@@ -3,14 +3,17 @@ package com.eneskaya.veterinarymanagementsystem.api;
 import com.eneskaya.veterinarymanagementsystem.business.abstracts.IAnimalService;
 import com.eneskaya.veterinarymanagementsystem.business.abstracts.ICustomerService;
 import com.eneskaya.veterinarymanagementsystem.core.config.modelMapper.IModelMapperService;
+import com.eneskaya.veterinarymanagementsystem.core.result.Result;
 import com.eneskaya.veterinarymanagementsystem.core.result.ResultData;
 import com.eneskaya.veterinarymanagementsystem.core.utilies.ResultHelper;
 import com.eneskaya.veterinarymanagementsystem.dto.request.animal.AnimalSaveRequest;
 import com.eneskaya.veterinarymanagementsystem.dto.response.animal.AnimalResponse;
+import com.eneskaya.veterinarymanagementsystem.dto.response.cursor.CursorResponse;
 import com.eneskaya.veterinarymanagementsystem.dto.response.customer.CustomerResponse;
 import com.eneskaya.veterinarymanagementsystem.entities.Animal;
 import com.eneskaya.veterinarymanagementsystem.entities.Customer;
 import jakarta.validation.Valid;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
@@ -32,29 +35,42 @@ public class AnimalController {
     @PostMapping()
     @ResponseStatus(HttpStatus.CREATED)
     public ResultData<AnimalResponse> save(@Valid @RequestBody AnimalSaveRequest animalSaveRequest) {
-        // Müşteri kimliğini al
         Long customerId = animalSaveRequest.getCustomer().getId();
-
-        // Veritabanından müşteri bilgilerini al
         Customer customer = customerService.get(Math.toIntExact(customerId));
-
-        // AnimalSaveRequest nesnesini Animal nesnesine dönüştür
         Animal saveAnimal = this.modelMapper.forResponse().map(animalSaveRequest, Animal.class);
-
-        // Alınan müşteri bilgilerini hayvan nesnesine ekle
         saveAnimal.setCustomer(customer);
-
-        // Hayvan nesnesini veritabanına kaydet
         this.animalService.save(saveAnimal);
-
-        // Kaydedilen hayvan nesnesini AnimalResponse nesnesine dönüştür
         AnimalResponse animalResponse = this.modelMapper.forResponse().map(saveAnimal, AnimalResponse.class);
-
-        // Yanıta müşteri bilgilerini ekle
         animalResponse.setCustomer(customer);
-
-        // Yanıtı döndür
         return ResultHelper.createData(animalResponse);
+    }
+
+    @GetMapping("/{id}")
+    @ResponseStatus(HttpStatus.OK)
+    public ResultData<AnimalResponse> get(@PathVariable("id") Long id) {
+        Animal animal = this.animalService.get(Math.toIntExact(id));
+        AnimalResponse animalResponse = this.modelMapper.forResponse().map(animal, AnimalResponse.class);
+        return ResultHelper.successData(animalResponse);
+    }
+
+    @GetMapping()
+    @ResponseStatus(HttpStatus.OK)
+    public ResultData<CursorResponse<AnimalResponse>> cursor(
+            @RequestParam(name = "page", required = false, defaultValue = "0") int page,
+            @RequestParam(name = "pageSize", required = false, defaultValue = "10") int pageSize
+    ) {
+        Page<Animal> animalPage = this.animalService.cursor(page, pageSize);
+        Page<AnimalResponse> animalResponsePage = animalPage
+                .map(animal -> this.modelMapper.forResponse().map(animal, AnimalResponse.class));
+        return ResultHelper.cursor(animalResponsePage);
+    }
+
+    @DeleteMapping("/{id}")
+    @ResponseStatus(HttpStatus.OK)
+    public Result delete(@PathVariable("id") int id) {
+        this.animalService.delete(id);
+        return ResultHelper.ok();
+
     }
 
 
