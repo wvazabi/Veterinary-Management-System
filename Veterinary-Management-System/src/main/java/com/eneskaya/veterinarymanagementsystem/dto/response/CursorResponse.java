@@ -10,8 +10,10 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 public class CursorResponse<T> {
+
     private int pageNumber;
     private int pageSize;
     private long totalElements;
     private List<T> items;
+
 }
