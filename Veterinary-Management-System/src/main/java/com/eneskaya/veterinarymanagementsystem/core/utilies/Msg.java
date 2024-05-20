@@ -7,6 +7,7 @@ public class Msg {
     public static final  String NOT_FOUND = "Data has not been found";
     public static final  String NOT_FOUND_CSTMR = "Customer has not been found";
     public static final  String NOT_FOUND_ANIMAL = "Animal has not been found";
+    public static final  String NOT_FOUND_DR = "Doctor has not been found";
 
 
 }
