@@ -77,11 +77,13 @@ public class CustomerController {
         return ResultHelper.successData(customerResponse);
     }
 
+    // Delete Operatio
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
     public Result delete(@PathVariable("id") int id) {
         this.customerService.delete(id);
         return ResultHelper.ok();
+
     }
 
 }
