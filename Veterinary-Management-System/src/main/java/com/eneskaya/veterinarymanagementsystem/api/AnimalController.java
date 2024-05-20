@@ -7,6 +7,8 @@ import com.eneskaya.veterinarymanagementsystem.core.result.Result;
 import com.eneskaya.veterinarymanagementsystem.core.result.ResultData;
 import com.eneskaya.veterinarymanagementsystem.core.utilies.ResultHelper;
 import com.eneskaya.veterinarymanagementsystem.dto.request.animal.AnimalSaveRequest;
+import com.eneskaya.veterinarymanagementsystem.dto.request.animal.AnimalUpdateRequest;
+import com.eneskaya.veterinarymanagementsystem.dto.request.customer.CustomerUpdateRequest;
 import com.eneskaya.veterinarymanagementsystem.dto.response.animal.AnimalResponse;
 import com.eneskaya.veterinarymanagementsystem.dto.response.cursor.CursorResponse;
 import com.eneskaya.veterinarymanagementsystem.dto.response.customer.CustomerResponse;
@@ -70,8 +72,27 @@ public class AnimalController {
     public Result delete(@PathVariable("id") int id) {
         this.animalService.delete(id);
         return ResultHelper.ok();
-
     }
+
+    @PutMapping()
+    @ResponseStatus(HttpStatus.OK)
+    public ResultData<AnimalResponse> update(@Valid @RequestBody AnimalUpdateRequest animalUpdateRequest ) {
+        System.out.println("Received payload: " + animalUpdateRequest);
+        Animal updateAnimal = this.modelMapper.forRequest().map(animalUpdateRequest, Animal.class);
+        this.animalService.update(updateAnimal);
+        AnimalResponse animalResponse = this.modelMapper.forResponse().map(updateAnimal, AnimalResponse.class);
+        return ResultHelper.successData(animalResponse);
+    }
+
+    @GetMapping("/name={name}")
+    @ResponseStatus(HttpStatus.OK)
+    public ResultData<CustomerResponse> getByName(@PathVariable("name") String name) {
+        Customer customer = this.customerService.findByName(name);
+        CustomerResponse customerResponse = this.modelMapper.forResponse().map(customer, CustomerResponse.class);
+        return ResultHelper.successData(customerResponse);
+    }
+
+
 
 
 
