@@ -4,6 +4,8 @@ import com.eneskaya.veterinarymanagementsystem.entities.Animal;
 import com.eneskaya.veterinarymanagementsystem.entities.Customer;
 import org.springframework.data.domain.Page;
 
+import java.util.List;
+
 public interface IAnimalService {
 
     Animal save(Animal animal);
@@ -13,5 +15,7 @@ public interface IAnimalService {
     Page<Animal> cursor(int page, int pageSize);
     Animal update(Animal animal);
     boolean delete(int id);
+
+    List<Animal> findByCustomerNameContaining(String customerName);
 
 }

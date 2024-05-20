@@ -9,7 +9,12 @@ import com.eneskaya.veterinarymanagementsystem.entities.Customer;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.stereotype.Service;
 
+import java.util.List;
+
+
+@Service
 public class AnimalManager implements IAnimalService {
 
     private final AnimalRepo animalRepo;
@@ -51,4 +56,17 @@ public class AnimalManager implements IAnimalService {
         this.animalRepo.delete(animal);
         return true;
     }
+
+    @Override
+    public List<Animal> findByCustomerNameContaining(String customerName) {
+        List<Animal> animalList =  this.animalRepo.findByCustomerNameContaining(customerName);
+
+        if(animalList.isEmpty()) {
+            throw new NotFoundException(Msg.NOT_FOUND);
+        }
+
+        return  animalList;
+    }
+
+
 }

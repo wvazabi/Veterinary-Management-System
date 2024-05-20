@@ -1,4 +1,4 @@
-package com.eneskaya.veterinarymanagementsystem.dto.response;
+package com.eneskaya.veterinarymanagementsystem.dto.response.cursor;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

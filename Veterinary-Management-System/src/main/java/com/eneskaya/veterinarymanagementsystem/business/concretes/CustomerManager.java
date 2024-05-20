@@ -2,14 +2,19 @@ package com.eneskaya.veterinarymanagementsystem.business.concretes;
 
 import com.eneskaya.veterinarymanagementsystem.business.abstracts.ICustomerService;
 import com.eneskaya.veterinarymanagementsystem.core.exception.NotFoundException;
+import com.eneskaya.veterinarymanagementsystem.core.result.ResultData;
 import com.eneskaya.veterinarymanagementsystem.core.utilies.Msg;
 import com.eneskaya.veterinarymanagementsystem.dao.CustomerRepo;
+import com.eneskaya.veterinarymanagementsystem.dto.response.animal.AnimalResponse;
+import com.eneskaya.veterinarymanagementsystem.entities.Animal;
 import com.eneskaya.veterinarymanagementsystem.entities.Customer;
 import jdk.jfr.Category;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 public class CustomerManager implements ICustomerService {
@@ -56,4 +61,6 @@ public class CustomerManager implements ICustomerService {
         this.customerRepo.delete(customer);
         return true;
     }
+
+
 }

@@ -2,7 +2,7 @@ package com.eneskaya.veterinarymanagementsystem.core.utilies;
 
 import com.eneskaya.veterinarymanagementsystem.core.result.Result;
 import com.eneskaya.veterinarymanagementsystem.core.result.ResultData;
-import com.eneskaya.veterinarymanagementsystem.dto.response.CursorResponse;
+import com.eneskaya.veterinarymanagementsystem.dto.response.cursor.CursorResponse;
 import org.springframework.data.domain.Page;
 
 // Result Helper class, generate this class for write less code
