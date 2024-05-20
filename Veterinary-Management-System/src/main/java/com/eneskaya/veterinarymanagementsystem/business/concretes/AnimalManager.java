@@ -35,7 +35,7 @@ public class AnimalManager implements IAnimalService {
 
     @Override
     public Animal findByName(String name) {
-        return this.animalRepo.findByName(name).orElseThrow(() -> new NotFoundException(Msg.NOT_FOUND));
+        return this.animalRepo.findByName(name).orElseThrow(() -> new NotFoundException(Msg.NOT_FOUND_ANIMAL));
     }
 
     @Override

@@ -84,13 +84,15 @@ public class AnimalController {
         return ResultHelper.successData(animalResponse);
     }
 
+
     @GetMapping("/name={name}")
     @ResponseStatus(HttpStatus.OK)
-    public ResultData<CustomerResponse> getByName(@PathVariable("name") String name) {
-        Customer customer = this.customerService.findByName(name);
-        CustomerResponse customerResponse = this.modelMapper.forResponse().map(customer, CustomerResponse.class);
-        return ResultHelper.successData(customerResponse);
+    public ResultData<AnimalResponse> getByName(@PathVariable("name") String name) {
+        Animal animal = this.animalService.findByName(name);
+        AnimalResponse animalResponse = this.modelMapper.forResponse().map(animal,AnimalResponse.class);
+        return ResultHelper.successData(animalResponse);
     }
+
 
 
 
