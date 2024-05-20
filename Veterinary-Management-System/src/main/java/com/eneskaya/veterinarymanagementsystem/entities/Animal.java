@@ -47,13 +47,13 @@ public class Animal {
     @JoinColumn(name = "animal_customer_id",referencedColumnName = "customer_id")
     private Customer customer;
 
-//    @JsonIgnore
-//    @OneToMany(mappedBy = "animal", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
-//    private List<Vaccine> vaccineList;
+    @JsonIgnore
+    @OneToMany(mappedBy = "animal", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
+    private List<Vaccine> vaccineList;
 
-//    @JsonIgnore
-//    @OneToMany(mappedBy = "animal",fetch = FetchType.LAZY, cascade = CascadeType.REMOVE )
-//    private List<Appointment> appointmentList;
+    @JsonIgnore
+    @OneToMany(mappedBy = "animal",fetch = FetchType.LAZY, cascade = CascadeType.REMOVE )
+    private List<Appointment> appointmentList;
 
 
 
