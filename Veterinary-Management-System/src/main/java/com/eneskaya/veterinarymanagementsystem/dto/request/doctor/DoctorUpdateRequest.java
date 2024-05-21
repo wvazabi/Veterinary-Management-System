@@ -6,11 +6,10 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class DoctorUpdateRequest {
-    @Data
-    @NoArgsConstructor
-    @AllArgsConstructor
-    public class DoctorRequest {
 
         @Positive(message = "Doctor id should be positive number")
         private Long id;
@@ -29,6 +28,5 @@ public class DoctorUpdateRequest {
 
         @NotNull(message = "Doctor's city cannot be empty or null")
         private String city;
-    }
 
 }

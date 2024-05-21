@@ -56,7 +56,7 @@ public class DoctorController {
         return ResultHelper.cursor(doctorResponsePage);
     }
 
-    @PutMapping()
+    @PutMapping("/address")
     @ResponseStatus(HttpStatus.OK)
     public ResultData<DoctorResponse> update(@Valid @RequestBody DoctorUpdateRequest doctorUpdateRequest) {
         Doctor updateDoctor = this.modelMapper.forRequest().map(doctorUpdateRequest, Doctor.class);
