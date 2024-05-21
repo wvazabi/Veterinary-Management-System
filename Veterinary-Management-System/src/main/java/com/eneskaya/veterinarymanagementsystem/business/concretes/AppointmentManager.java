@@ -56,7 +56,7 @@ public class AppointmentManager implements IAppointmentService {
 
     @Override
     public Appointment update(Appointment appointment) {
-        this.get(Math.toIntExact(appointment.getId()));
+        //this.get(Math.toIntExact(appointment.getId()));
         return this.appointmentRepo.save(appointment);
     }
 
