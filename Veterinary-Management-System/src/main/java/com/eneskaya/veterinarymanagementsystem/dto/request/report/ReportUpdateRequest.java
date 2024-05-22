@@ -11,7 +11,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class ReportUpdateRequest {
-    @Positive
     private Long id;
     @NotNull(message = "Rapor başlığı boş veya null olamaz")
     private String title;

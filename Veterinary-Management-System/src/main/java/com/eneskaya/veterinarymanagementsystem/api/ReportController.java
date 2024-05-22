@@ -3,7 +3,9 @@ package com.eneskaya.veterinarymanagementsystem.api;
 import com.eneskaya.veterinarymanagementsystem.business.abstracts.IReportService;
 import com.eneskaya.veterinarymanagementsystem.core.config.modelMapper.IModelMapperService;
 import com.eneskaya.veterinarymanagementsystem.core.result.ResultData;
+import com.eneskaya.veterinarymanagementsystem.dto.request.report.ReportUpdateRequest;
 import com.eneskaya.veterinarymanagementsystem.dto.response.report.ReportResponse;
+import com.eneskaya.veterinarymanagementsystem.entities.Report;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -11,7 +13,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/v1/repots")
+@RequestMapping("/v1/reports")
 public class ReportController {
 
     private final IReportService reportService;
@@ -37,13 +39,13 @@ public class ReportController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public ResultData<ReportResponse> save(@Valid @RequestBody ReportRequest request) {
+    public ResultData<ReportResponse> save(@Valid @RequestBody ReportUpdateRequest request) {
         return this.reportService.save(request);
     }
 
     @PutMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public ResultData<ReportResponse> update(@Valid @PathVariable Long id, @RequestBody ReportRequest request) {
+    public ResultData<ReportResponse> update(@Valid @PathVariable Long id, @RequestBody ReportUpdateRequest request) {
         return  this.reportService.update(id, request);
     }
 
