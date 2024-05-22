@@ -16,7 +16,7 @@ public interface IVaccineService {
     Vaccine save(VaccineSaveRequest request);
     Optional<Vaccine> get(Long id);
     Page<Vaccine> cursor(int page, int pageSize);
-    Vaccine update(VaccineUpdateRequest request);
+    ResultData<VaccineResponse> update(Long id, VaccineUpdateRequest request);
     boolean delete(Long id);
 
     ResultData<List<VaccineResponse>> vaccineList(LocalDate startDate, LocalDate endDate);

@@ -59,13 +59,11 @@ public class VaccineController {
         return ResultHelper.cursor(vaccineResponsePage);
     }
 
-    @PutMapping()
+    @PutMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public ResultData<VaccineResponse> update(@Valid @RequestBody VaccineUpdateRequest vaccineUpdateRequest) {
-        Vaccine vaccine = this.vaccineService.update(vaccineUpdateRequest);
-        VaccineResponse vaccineResponse = this.modelMapper.forResponse().map(vaccine,VaccineResponse.class);
-        vaccineResponse.setAnimal(vaccineUpdateRequest.getAnimal());
-        return ResultHelper.successData(vaccineResponse);
+    public ResultData<VaccineResponse> update(@Valid @PathVariable("id") Long id, @RequestBody VaccineUpdateRequest vaccineUpdateRequest) {
+        return this.vaccineService.update(id, vaccineUpdateRequest);
+
     }
 
     @DeleteMapping("/{id}")

@@ -66,17 +66,11 @@ public class VaccineManager implements IVaccineService {
     }
 
     @Override
-    public Vaccine update(VaccineUpdateRequest request) {
-        this.get(request.getId());
-        List<Vaccine> vaccineList = this.vaccineRepo.findByCodeAndAnimalId(request.getCode(), request.getAnimal().getId());
-        if(!vaccineList.isEmpty() && vaccineList.get(vaccineList.size()-1).getProtectionFinishDate().isAfter(LocalDate.now())) {
-            throw new CustomException("Bu hastaya " + request.getName() + " aşısı uygulanmış ve koruyuculuk süresi devam ettiğinden sisteme yeniden girilemez!");
-        } else {
-            request.setAnimal(this.animalRepo.findById(Math.toIntExact(request.getAnimal().getId())).get());
-            Vaccine vaccine = this.modelMapper.forResponse().map(request,Vaccine.class);
-            this.vaccineRepo.save(vaccine);
-            return vaccine;
-        }
+    public ResultData<VaccineResponse> update(Long id, VaccineUpdateRequest request) {
+        Vaccine vaccine = this.vaccineRepo.findById(request.getId()).orElseThrow(() -> new NotFoundException(Msg.NOT_FOUND));
+         VaccineResponse vaccineResponse = this.modelMapper.forResponse().map(vaccine,VaccineResponse.class);
+        this.vaccineRepo.save(vaccine);
+        return ResultHelper.successData(vaccineResponse);
     }
 
     @Override
