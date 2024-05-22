@@ -54,7 +54,7 @@ public class AppointmentController {
         Doctor doctor = this.doctorService.get(Math.toIntExact(doctorId));
         Animal animal = this.animalService.get(Math.toIntExact(animalId));
 
-        Appointment saveAppointment = this.modelMapper.forResponse().map(appointmentSaveRequest, Appointment.class);
+        Appointment saveAppointment = this.modelMapper.forRequest().map(appointmentSaveRequest, Appointment.class);
         saveAppointment.setAnimal(animal);
         saveAppointment.setDoctor(doctor);
         this.appointmentService.save(saveAppointment);

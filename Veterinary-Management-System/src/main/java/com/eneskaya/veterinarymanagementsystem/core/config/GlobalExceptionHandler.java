@@ -1,5 +1,6 @@
 package com.eneskaya.veterinarymanagementsystem.core.config;
 
+import com.eneskaya.veterinarymanagementsystem.core.exception.CustomException;
 import com.eneskaya.veterinarymanagementsystem.core.exception.NotFoundException;
 import com.eneskaya.veterinarymanagementsystem.core.result.Result;
 import com.eneskaya.veterinarymanagementsystem.core.result.ResultData;
@@ -22,6 +23,12 @@ public class GlobalExceptionHandler {
     public ResponseEntity<Result> handleNotFoundException(NotFoundException e) {
         // mesajı al response entity oluştur
         return new ResponseEntity<>(ResultHelper.notFound(e.getMessage()), HttpStatus.NOT_FOUND);
+    }
+
+    @ExceptionHandler(CustomException.class)
+    public ResponseEntity<Result> handleCustomException(CustomException e) {
+        // mesajı al response entity oluştur
+        return new ResponseEntity<>(ResultHelper.customExp(e.getMessage()), HttpStatus.NOT_FOUND);
     }
 
 

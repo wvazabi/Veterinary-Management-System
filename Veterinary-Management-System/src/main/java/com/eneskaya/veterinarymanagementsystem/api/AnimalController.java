@@ -42,7 +42,7 @@ public class AnimalController {
     public ResultData<AnimalResponse> save(@Valid @RequestBody AnimalSaveRequest animalSaveRequest) {
         Long customerId = animalSaveRequest.getCustomer().getId();
         Customer customer = customerService.get(Math.toIntExact(customerId));
-        Animal saveAnimal = this.modelMapper.forResponse().map(animalSaveRequest, Animal.class);
+        Animal saveAnimal = this.modelMapper.forRequest().map(animalSaveRequest, Animal.class);
         saveAnimal.setCustomer(customer);
         this.animalService.save(saveAnimal);
         AnimalResponse animalResponse = this.modelMapper.forResponse().map(saveAnimal, AnimalResponse.class);

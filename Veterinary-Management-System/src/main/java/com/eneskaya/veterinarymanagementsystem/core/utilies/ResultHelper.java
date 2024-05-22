@@ -26,6 +26,13 @@ public class ResultHelper {
         return new Result(true, msg, "404");
     }
 
+    public static Result customExp(String msg) {
+        return new Result(true, msg, "404");
+    }
+
+
+
+
     public static <T> ResultData<CursorResponse<T>> cursor(Page<T> pageData) {
         CursorResponse<T> cursor = new CursorResponse<>();
         cursor.setItems(pageData.getContent());
