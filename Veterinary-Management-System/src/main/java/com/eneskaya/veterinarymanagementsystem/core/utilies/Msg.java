@@ -10,6 +10,8 @@ public class Msg {
     public static final  String NOT_FOUND_DR = "Doctor has not been found";
     public static final  String NOT_FOUND_APPNTMNT = "Appointment has not been found";
     public static final  String NOT_FOUND_AVLB_DATE = "Available date has not been found";
+    public static final  String NOT_FOUND_VACCINE = "Vaccine has not been found";
+
 
 
 }
