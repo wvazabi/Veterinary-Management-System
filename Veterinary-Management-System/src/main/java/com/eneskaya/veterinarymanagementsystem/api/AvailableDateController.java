@@ -5,7 +5,9 @@ import com.eneskaya.veterinarymanagementsystem.business.abstracts.IDoctorService
 import com.eneskaya.veterinarymanagementsystem.core.config.modelMapper.IModelMapperService;
 import com.eneskaya.veterinarymanagementsystem.core.result.ResultData;
 import com.eneskaya.veterinarymanagementsystem.core.utilies.ResultHelper;
+import com.eneskaya.veterinarymanagementsystem.dto.request.animal.AnimalUpdateRequest;
 import com.eneskaya.veterinarymanagementsystem.dto.request.availableDate.AvailableDateSaveRequest;
+import com.eneskaya.veterinarymanagementsystem.dto.request.availableDate.AvailableDateUpdateRequest;
 import com.eneskaya.veterinarymanagementsystem.dto.response.animal.AnimalResponse;
 import com.eneskaya.veterinarymanagementsystem.dto.response.availableDate.AvailableDateResponse;
 import com.eneskaya.veterinarymanagementsystem.entities.Animal;
@@ -32,12 +34,22 @@ public class AvailableDateController {
     @ResponseStatus(HttpStatus.CREATED)
     public ResultData<AvailableDateResponse> save(@Valid @RequestBody AvailableDateSaveRequest availableDateSaveRequest) {
         AvailableDate savedAvailableDate = this.availableDateService.save(availableDateSaveRequest);
-
         AvailableDateResponse availableDateResponse = this.modelMapper.forResponse().map(savedAvailableDate,AvailableDateResponse.class);
         availableDateResponse.setDoctor(savedAvailableDate.getDoctor());
         availableDateResponse.setAvailableDate(savedAvailableDate.getAvailableDate());
 
         return ResultHelper.createData(availableDateResponse);
 
+    }
+
+    @PutMapping()
+    @ResponseStatus(HttpStatus.OK)
+    public ResultData<AvailableDateResponse> update(@Valid @RequestBody AvailableDateUpdateRequest availableDateUpdateRequest) {
+
+        AvailableDate updateAvailableDate = this.availableDateService.update(availableDateUpdateRequest);
+        AvailableDateResponse availableDateResponse = this.modelMapper.forResponse().map(updateAvailableDate,AvailableDateResponse.class);
+        availableDateResponse.setDoctor(updateAvailableDate.getDoctor());
+        availableDateResponse.setAvailableDate(updateAvailableDate.getAvailableDate());
+        return ResultHelper.createData(availableDateResponse);
     }
 }
