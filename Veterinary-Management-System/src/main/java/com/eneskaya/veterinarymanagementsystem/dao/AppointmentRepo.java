@@ -16,8 +16,12 @@ import java.util.Optional;
 @Repository
 public interface AppointmentRepo extends JpaRepository<Appointment, Long> {
     Optional<Appointment> findByAppointmentDateAndDoctorId(LocalDateTime AppointmentDate, Long doctorId);
-    @Query("SELECT availableDateList adl FROM Doctor d WHERE d.id = :id")
+//    @Query("SELECT availableDateList  FROM Doctor d WHERE d.id = :id")
+//    List<AvailableDate> findAvailableDateByDoctorId(@Param("id") Long id);
+
+    @Query("SELECT ad FROM AvailableDate ad WHERE ad.doctor.id = :id")
     List<AvailableDate> findAvailableDateByDoctorId(@Param("id") Long id);
+
     @Query("FROM Doctor d WHERE d.id = :id")
     Optional<Doctor> findDoctorByDoctorId(@Param("id") Long id);
     @Query("FROM Animal a WHERE a.id = :id")

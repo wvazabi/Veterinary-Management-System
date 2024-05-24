@@ -49,19 +49,19 @@ public class AppointmentController {
     @PostMapping()
     @ResponseStatus(HttpStatus.CREATED)
     public ResultData<AppointmentResponse> save(@Valid @RequestBody AppointmentSaveRequest appointmentSaveRequest) {
-        Long doctorId = appointmentSaveRequest.getDoctor().getId();
-        Long animalId = appointmentSaveRequest.getAnimal().getId();
-        Doctor doctor = this.doctorService.get(Math.toIntExact(doctorId));
-        Animal animal = this.animalService.get(Math.toIntExact(animalId));
+//        Long doctorId = appointmentSaveRequest.getDoctor().getId();
+//        Long animalId = appointmentSaveRequest.getAnimal().getId();
+//        Doctor doctor = this.doctorService.get(Math.toIntExact(doctorId));
+//        Animal animal = this.animalService.get(Math.toIntExact(animalId));
 
         Appointment saveAppointment = this.modelMapper.forRequest().map(appointmentSaveRequest, Appointment.class);
-        saveAppointment.setAnimal(animal);
-        saveAppointment.setDoctor(doctor);
+//        saveAppointment.setAnimal(animal);
+//        saveAppointment.setDoctor(doctor);
         this.appointmentService.save(saveAppointment);
 
         AppointmentResponse appointmentResponse = this.modelMapper.forResponse().map(saveAppointment,AppointmentResponse.class);
-        appointmentResponse.setAnimal(animal);
-        appointmentResponse.setDoctor(doctor);
+//        appointmentResponse.setAnimal(animal);
+//        appointmentResponse.setDoctor(doctor);
 
         return ResultHelper.createData(appointmentResponse);
     }

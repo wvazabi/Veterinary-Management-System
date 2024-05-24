@@ -1,6 +1,7 @@
 package com.eneskaya.veterinarymanagementsystem.business.concretes;
 
 import com.eneskaya.veterinarymanagementsystem.business.abstracts.IAppointmentService;
+import com.eneskaya.veterinarymanagementsystem.core.exception.CustomException;
 import com.eneskaya.veterinarymanagementsystem.core.exception.DoctorAppointmentException;
 import com.eneskaya.veterinarymanagementsystem.core.exception.NotFoundException;
 import com.eneskaya.veterinarymanagementsystem.core.result.ResultData;
@@ -39,8 +40,29 @@ public class AppointmentManager implements IAppointmentService {
 
     @Override
     public Appointment save(Appointment appointment) {
-        return this.appointmentRepo.save(appointment);
+
+
+        Optional<Doctor> isDoctorExist = this.appointmentRepo.findDoctorByDoctorId(appointment.getDoctor().getId());
+        Optional<Animal> isAnimalExist = this.appointmentRepo.findAnimalByAnimalId(appointment.getAnimal().getId());
+
+        if(isDoctorExist.isEmpty() || isAnimalExist.isEmpty()) {
+            throw new NotFoundException(Msg.NOT_FOUND_ANIMAL + " or " + Msg.NOT_FOUND_DR);
+        } else {
+            Optional<Appointment> isAppointmentExist = this.appointmentRepo.findByAppointmentDateAndDoctorId(appointment.getAppointmentDate(), appointment.getDoctor().getId());
+            List<AvailableDate> availableDates = this.appointmentRepo.findAvailableDateByDoctorId(appointment.getDoctor().getId());
+
+            for (AvailableDate obj : availableDates) {
+                if (Objects.equals(obj.getAvailableDate(), appointment.getAppointmentDate().toLocalDate()) && isAppointmentExist.isEmpty()) {
+                    appointment.setAnimal(this.animalRepo.findById(Math.toIntExact(appointment.getAnimal().getId())).get());
+                    appointment.setDoctor(this.doctorRepo.findById(appointment.getDoctor().getId()).get());
+                    return this.appointmentRepo.save(appointment);
+                }
+            }
+            throw new CustomException("DR ID: " + appointment.getDoctor().getId() + " Doctor is not available at this date");
+        }
     }
+
+
 
 
     @Override
@@ -57,7 +79,19 @@ public class AppointmentManager implements IAppointmentService {
     @Override
     public Appointment update(Appointment appointment) {
         //this.get(Math.toIntExact(appointment.getId()));
-        return this.appointmentRepo.save(appointment);
+
+        Optional<Doctor> isDoctorExist = this.appointmentRepo.findDoctorByDoctorId(appointment.getDoctor().getId());
+        Optional<Animal> isAnimalExist = this.appointmentRepo.findAnimalByAnimalId(appointment.getAnimal().getId());
+        if(isDoctorExist.isEmpty() || isAnimalExist.isEmpty()) {
+            throw new CustomException("DR ID:" + appointment.getDoctor().getId() + Msg.NOT_FOUND_DR +"  or Animal ID: " + appointment.getAnimal().getId() + Msg.NOT_FOUND_ANIMAL);
+        } else {
+            this.appointmentRepo.findById(appointment.getId()).orElseThrow(() ->
+                    new NotFoundException(Msg.NOT_FOUND));
+            return this.appointmentRepo.save(appointment);
+        }
+
+
+
     }
 
     @Override
