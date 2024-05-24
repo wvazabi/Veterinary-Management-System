@@ -46,11 +46,8 @@ public class VaccineManager implements IVaccineService {
             throw new CustomException("Bu hastaya " + request.getName() + " aşısı uygulanmış ve koruyuculuk süresi devam ettiğinden sisteme yeniden girilemez!");
         } else {
             request.setAnimal(this.animalRepo.findById(Math.toIntExact(request.getAnimal().getId())).get());
-
-
             Vaccine vaccine = this.modelMapper.forResponse().map(request,Vaccine.class);
-            this.vaccineRepo.save(vaccine);
-            return vaccine;
+            return this.vaccineRepo.save(vaccine);
         }
     }
 

@@ -49,20 +49,9 @@ public class AppointmentController {
     @PostMapping()
     @ResponseStatus(HttpStatus.CREATED)
     public ResultData<AppointmentResponse> save(@Valid @RequestBody AppointmentSaveRequest appointmentSaveRequest) {
-//        Long doctorId = appointmentSaveRequest.getDoctor().getId();
-//        Long animalId = appointmentSaveRequest.getAnimal().getId();
-//        Doctor doctor = this.doctorService.get(Math.toIntExact(doctorId));
-//        Animal animal = this.animalService.get(Math.toIntExact(animalId));
-
         Appointment saveAppointment = this.modelMapper.forRequest().map(appointmentSaveRequest, Appointment.class);
-//        saveAppointment.setAnimal(animal);
-//        saveAppointment.setDoctor(doctor);
         this.appointmentService.save(saveAppointment);
-
         AppointmentResponse appointmentResponse = this.modelMapper.forResponse().map(saveAppointment,AppointmentResponse.class);
-//        appointmentResponse.setAnimal(animal);
-//        appointmentResponse.setDoctor(doctor);
-
         return ResultHelper.createData(appointmentResponse);
     }
 
@@ -120,33 +109,31 @@ public class AppointmentController {
     }
 
     // TODO Appointments are filtered by the date range entered by the user and the doctor.
-//    @GetMapping("/doctor/{doctorId}")
-//    @ResponseStatus(HttpStatus.OK)
-//    public ResultData<List<AppointmentResponse>> getAppointmentsByDoctorAndDateRange(
-//            @PathVariable("doctorId") Long doctorId,
-//            @RequestParam("start") LocalDate startDate,
-//            @RequestParam("end") LocalDate endDate
-//    ) {
-//        List<Appointment> appointments = appointmentService.appointmentListByDoctorAndDateRange(doctorId, startDate, endDate);
-//        List<AppointmentResponse> appointmentResponses = appointments.stream()
-//                .map(AppointmentResponse::fromEntity)
-//                .collect(Collectors.toList());
-//        return ResultHelper.successData(appointmentResponses);
-//    }
-//
-//    @GetMapping("/animal/{animalId}")
-//    @ResponseStatus(HttpStatus.OK)
-//    public ResultData<List<AppointmentResponse>> getAppointmentsByAnimalAndDateRange(
-//            @PathVariable("animalId") Long animalId,
-//            @RequestParam("start") LocalDate startDate,
-//            @RequestParam("end") LocalDate endDate
-//    ) {
-//        List<Appointment> appointments = appointmentService.appointmentListByAnimalAndDateRange(animalId, startDate, endDate);
-//        List<AppointmentResponse> appointmentResponses = appointments.stream()
-//                .map(AppointmentResponse::fromEntity)
-//                .collect(Collectors.toList());
-//        return ResultHelper.successData(appointmentResponses);
-//    }
+    @GetMapping("/doctor/{doctorId}")
+    @ResponseStatus(HttpStatus.OK)
+    public ResultData<List<AppointmentResponse>> getAppointmentsByDoctorAndDateRange(
+            @PathVariable("doctorId") Long doctorId,
+            @RequestParam(value = "start",required = true, defaultValue = "2024-02-15") LocalDate startDate,
+            @RequestParam(value = "end",required = true, defaultValue = "2025-02-15") LocalDate endDate
+    ) {
+        List<Appointment> appointments = appointmentService.appointmentListByDoctorAndDateRange(doctorId, startDate, endDate);
+        List<AppointmentResponse> appointmentResponses = appointments.stream().map(appointment ->this.modelMapper.forResponse().map(appointment,AppointmentResponse.class)).collect(Collectors.toList());
+        return ResultHelper.successData(appointmentResponses);
+    }
+
+    @GetMapping("/animal/{animalId}")
+    @ResponseStatus(HttpStatus.OK)
+    public ResultData<List<AppointmentResponse>> getAppointmentsByAnimalAndDateRange(
+            @PathVariable("animalId") Long animalId,
+            @RequestParam("start") LocalDate startDate,
+            @RequestParam("end") LocalDate endDate
+    ) {
+        List<Appointment> appointments = appointmentService.appointmentListByAnimalAndDateRange(animalId, startDate, endDate);
+        List<AppointmentResponse> appointmentResponses = appointments.stream()
+                .map(appointment -> this.modelMapper.forResponse().map(appointment,AppointmentResponse.class))
+                .collect(Collectors.toList());
+        return ResultHelper.successData(appointmentResponses);
+    }
 
 
 }
