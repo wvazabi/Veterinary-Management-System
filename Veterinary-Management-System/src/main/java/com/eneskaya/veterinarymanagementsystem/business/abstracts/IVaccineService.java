@@ -13,11 +13,13 @@ import java.util.Optional;
 
 public interface IVaccineService {
 
-    Vaccine save(VaccineSaveRequest request);
+//    Vaccine save(VaccineSaveRequest request);
+    ResultData<VaccineResponse> save(VaccineSaveRequest request);
     Optional<Vaccine> get(Long id);
     Page<Vaccine> cursor(int page, int pageSize);
     ResultData<VaccineResponse> update(Long id, VaccineUpdateRequest request);
     boolean delete(Long id);
+    List<Vaccine> getVaccinesByProtectionFinishDateRange(LocalDate startDate, LocalDate endDate);
 
     ResultData<List<VaccineResponse>> vaccineList(LocalDate startDate, LocalDate endDate);
 
