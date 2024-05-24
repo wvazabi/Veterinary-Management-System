@@ -2,6 +2,7 @@ package com.eneskaya.veterinarymanagementsystem.business.concretes;
 
 
 import com.eneskaya.veterinarymanagementsystem.business.abstracts.IDoctorService;
+import com.eneskaya.veterinarymanagementsystem.core.exception.CustomException;
 import com.eneskaya.veterinarymanagementsystem.core.exception.NotFoundException;
 import com.eneskaya.veterinarymanagementsystem.core.utilies.Msg;
 import com.eneskaya.veterinarymanagementsystem.dao.DoctorRepo;
@@ -11,6 +12,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+
+import java.util.Optional;
 
 
 @Service
@@ -25,7 +28,15 @@ public class DoctorManager implements IDoctorService {
 
     @Override
     public Doctor save(Doctor doctor) {
-        return this.doctorRepo.save(doctor);
+
+        Optional<Doctor> isDoctorExist = this.doctorRepo.findByNameAndPhone(doctor.getName(), doctor.getPhone());
+        if(isDoctorExist.isEmpty()) {
+            return this.doctorRepo.save(doctor);
+        }
+        throw new CustomException(Msg.NOT_FOUND_DUPLICATE);
+
+
+
     }
 
     @Override
@@ -41,7 +52,7 @@ public class DoctorManager implements IDoctorService {
 
     @Override
     public Doctor update(Doctor doctor) {
-        //this.get(Math.toIntExact((doctor.getId())));
+        this.doctorRepo.findById(doctor.getId()).orElseThrow(() -> new NotFoundException(Msg.NOT_FOUND_DR));
         return this.doctorRepo.save(doctor);
     }
 

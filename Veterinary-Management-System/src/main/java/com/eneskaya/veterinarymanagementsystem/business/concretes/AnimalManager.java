@@ -1,6 +1,7 @@
 package com.eneskaya.veterinarymanagementsystem.business.concretes;
 
 import com.eneskaya.veterinarymanagementsystem.business.abstracts.IAnimalService;
+import com.eneskaya.veterinarymanagementsystem.core.exception.CustomException;
 import com.eneskaya.veterinarymanagementsystem.core.exception.NotFoundException;
 import com.eneskaya.veterinarymanagementsystem.core.utilies.Msg;
 import com.eneskaya.veterinarymanagementsystem.dao.AnimalRepo;
@@ -12,6 +13,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 
 @Service
@@ -25,7 +27,20 @@ public class AnimalManager implements IAnimalService {
 
     @Override
     public Animal save(Animal animal) {
-        return this.animalRepo.save(animal);
+
+        Optional<Customer> isCustomerExist = this.animalRepo.findCustomerByCustomerId(animal.getCustomer().getId());
+        if(isCustomerExist.isEmpty()) {
+            throw new NotFoundException(Msg.NOT_FOUND_CSTMR + " ID: " + animal.getCustomer().getId());
+        } else {
+            Optional<Animal> isAnimalExist = this.animalRepo.findByNameAndSpeciesAndBreed(animal.getName(), animal.getSpecies(), animal.getBreed());
+            if(isAnimalExist.isEmpty()) {
+                return this.animalRepo.save(animal);
+            }
+            throw new CustomException(Msg.NOT_FOUND_DUPLICATE);
+        }
+
+
+
     }
 
     @Override
@@ -47,6 +62,10 @@ public class AnimalManager implements IAnimalService {
     @Override
     public Animal update(Animal animal) {
         this.get(Math.toIntExact(animal.getId()));
+        Optional<Customer> isCustomerExist = this.animalRepo.findCustomerByCustomerId(animal.getCustomer().getId());
+        if(isCustomerExist.isEmpty()) {
+            throw new NotFoundException(Msg.NOT_FOUND_CSTMR + " ID: " + animal.getCustomer().getId());
+        }
         return this.animalRepo.save(animal);
     }
 
