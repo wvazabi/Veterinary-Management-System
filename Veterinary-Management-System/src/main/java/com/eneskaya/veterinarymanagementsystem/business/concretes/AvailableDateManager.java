@@ -64,15 +64,16 @@ public class AvailableDateManager implements IAvailableDateService {
     }
     @Override
     public AvailableDate update(AvailableDateUpdateRequest request) {
-        this.get(request.getId());
         Optional<Doctor> isDoctorExist = this.availableDateRepo.findDoctorByDoctorId(request.getDoctor().getId());
         if(isDoctorExist.isEmpty()) {
             throw new NotFoundException(Msg.NOT_FOUND_DR + "Doctor ID" + request.getDoctor().getId());
         } else {
+            AvailableDate availableDate = this.availableDateRepo.findById(request.getId()).orElseThrow(() -> new NotFoundException(Msg.NOT_FOUND_AVLB_DATE));
             Optional<AvailableDate> isAvailableDateExist = this.availableDateRepo.findByAvailableDateAndDoctorId(request.getAvailableDate(),
                     request.getDoctor().getId());
             if(isAvailableDateExist.isEmpty()) {
                 request.setDoctor(this.doctorRepo.findById(request.getDoctor().getId()).get());
+
                 AvailableDate saveAvailableDate = this.modelMapper.forRequest().map(request, AvailableDate.class);
                 this.availableDateRepo.save(saveAvailableDate);
                 return saveAvailableDate;
