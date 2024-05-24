@@ -23,7 +23,7 @@ public class Doctor {
     @Column(name = "doctor_name", nullable = false)
     private String name;
 
-    @Column(name = "doctor_phone", nullable = false, columnDefinition = "VARCHAR(11)")
+    @Column(name = "doctor_phone", nullable = false, columnDefinition = "VARCHAR(30)")
     private String phone;
 
     @Column(name = "doctor_mail", nullable = false)

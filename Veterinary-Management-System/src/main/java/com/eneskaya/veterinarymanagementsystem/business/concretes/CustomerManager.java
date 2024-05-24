@@ -15,6 +15,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class CustomerManager implements ICustomerService {
@@ -27,11 +28,21 @@ public class CustomerManager implements ICustomerService {
 
     @Override
     public Customer save(Customer customer) {
-        return this.customerRepo.save(customer);
+
+        Optional<Customer> isCustomerExist = this.customerRepo.findByNameAndPhone(customer.getName(), customer.getPhone());
+        if(isCustomerExist.isEmpty()) {
+            return this.customerRepo.save(customer);
+        }
+        throw new NotFoundException(Msg.NOT_FOUND_CSTMR);
+
+
+
     }
 
     @Override
     public Customer get(int id) {
+
+
         return this.customerRepo.findById(id).orElseThrow(() -> new NotFoundException(Msg.NOT_FOUND_CSTMR));
     }
 
