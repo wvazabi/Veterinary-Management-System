@@ -19,7 +19,6 @@ The software facilitates veterinary clinic operations, including managing veteri
 - Java 17 or later
 - PostgreSQL
 
-markdown
 ## Technologies Used
 - Object-Oriented Programming (OOP): Follows object-oriented programming principles to design the system.
 - Java: Used for backend development, leveraging its robustness and portability.
