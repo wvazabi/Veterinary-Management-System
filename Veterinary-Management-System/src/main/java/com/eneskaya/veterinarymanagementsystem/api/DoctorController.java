@@ -19,14 +19,17 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/v1/doctors")
 public class DoctorController {
 
+    // Services injected through constructor dependency injection
     private final IDoctorService doctorService;
     private final IModelMapperService modelMapper;
 
+    // Constructor for dependency injection
     public DoctorController(IDoctorService doctorService, IModelMapperService modelMapper) {
         this.doctorService = doctorService;
         this.modelMapper = modelMapper;
     }
 
+    // Endpoint to save a new doctor
     @PostMapping()
     @ResponseStatus(HttpStatus.CREATED)
     public ResultData<DoctorResponse> save(@Valid @RequestBody DoctorSaveRequest doctorSaveRequest) {
@@ -36,6 +39,7 @@ public class DoctorController {
         return ResultHelper.createData(doctorResponse);
     }
 
+    // Endpoint to get a doctor by its ID
     @GetMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
     public ResultData<DoctorResponse> get(@PathVariable("id") int id) {
@@ -44,6 +48,7 @@ public class DoctorController {
         return ResultHelper.successData(doctorResponse);
     }
 
+    // Endpoint to get a paginated list of doctors
     @GetMapping()
     @ResponseStatus(HttpStatus.OK)
     public ResultData<CursorResponse<DoctorResponse>> cursor(
@@ -56,6 +61,7 @@ public class DoctorController {
         return ResultHelper.cursor(doctorResponsePage);
     }
 
+    // Endpoint to update an existing doctor's address
     @PutMapping("/address")
     @ResponseStatus(HttpStatus.OK)
     public ResultData<DoctorResponse> update(@Valid @RequestBody DoctorUpdateRequest doctorUpdateRequest) {
@@ -65,7 +71,7 @@ public class DoctorController {
         return ResultHelper.successData(doctorResponse);
     }
 
-    // Delete Operation
+    // Endpoint to delete a doctor by its ID
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
     public Result delete(@PathVariable("id") int id) {
@@ -73,3 +79,4 @@ public class DoctorController {
         return ResultHelper.ok();
     }
 }
+
