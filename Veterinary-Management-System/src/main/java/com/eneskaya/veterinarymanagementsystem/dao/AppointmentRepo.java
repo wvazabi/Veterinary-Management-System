@@ -15,18 +15,26 @@ import java.util.Optional;
 
 @Repository
 public interface AppointmentRepo extends JpaRepository<Appointment, Long> {
-    Optional<Appointment> findByAppointmentDateAndDoctorId(LocalDateTime AppointmentDate, Long doctorId);
-//    @Query("SELECT availableDateList  FROM Doctor d WHERE d.id = :id")
-//    List<AvailableDate> findAvailableDateByDoctorId(@Param("id") Long id);
 
+    // Find an appointment by appointment date and doctor ID
+    Optional<Appointment> findByAppointmentDateAndDoctorId(LocalDateTime appointmentDate, Long doctorId);
+
+    // Find available dates for a doctor by doctor ID
     @Query("SELECT ad FROM AvailableDate ad WHERE ad.doctor.id = :id")
     List<AvailableDate> findAvailableDateByDoctorId(@Param("id") Long id);
 
+    // Find a doctor by their ID
     @Query("FROM Doctor d WHERE d.id = :id")
     Optional<Doctor> findDoctorByDoctorId(@Param("id") Long id);
+
+    // Find an animal by its ID
     @Query("FROM Animal a WHERE a.id = :id")
     Optional<Animal> findAnimalByAnimalId(@Param("id") Long id);
-    List<Appointment> findByDoctorIdAndAppointmentDateBetween(Long doctorId, LocalDateTime AppointmentDateStart, LocalDateTime AppointmentDateEnd);
-    List<Appointment> findByAnimalIdAndAppointmentDateBetween(Long animalId, LocalDateTime AppointmentDateStart, LocalDateTime AppointmentDateEnd);
 
+    // Find appointments for a doctor within a date range
+    List<Appointment> findByDoctorIdAndAppointmentDateBetween(Long doctorId, LocalDateTime appointmentDateStart, LocalDateTime appointmentDateEnd);
+
+    // Find appointments for an animal within a date range
+    List<Appointment> findByAnimalIdAndAppointmentDateBetween(Long animalId, LocalDateTime appointmentDateStart, LocalDateTime appointmentDateEnd);
 }
+

@@ -7,8 +7,8 @@ import org.springframework.stereotype.Repository;
 import java.util.Optional;
 
 @Repository
-public interface DoctorRepo extends JpaRepository<Doctor, Long>{
+public interface DoctorRepo extends JpaRepository<Doctor, Long> {
 
+    // Find a doctor by name and phone
     Optional<Doctor> findByNameAndPhone(String name, String phone);
-
 }

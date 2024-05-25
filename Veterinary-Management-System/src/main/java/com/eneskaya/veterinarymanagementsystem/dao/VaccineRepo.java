@@ -10,10 +10,13 @@ import java.util.Optional;
 
 @Repository
 public interface VaccineRepo extends JpaRepository<Vaccine, Long> {
+
+    // Find vaccines by animal ID
     List<Vaccine> findByAnimalId(Long animalId);
+
+    // Find vaccines by code and animal ID
     List<Vaccine> findByCodeAndAnimalId(String code, Long animalId);
 
+    // Find vaccines by protection finish date between two dates
     List<Vaccine> findByProtectionFinishDateBetween(LocalDate startDate, LocalDate endDate);
-
-
 }

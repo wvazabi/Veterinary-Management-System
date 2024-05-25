@@ -26,7 +26,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
-
 @Service
 public class VaccineManager implements IVaccineService {
 
@@ -42,48 +41,33 @@ public class VaccineManager implements IVaccineService {
 
     @Override
     public ResultData<VaccineResponse> save(VaccineSaveRequest request) {
+        // Check if a vaccine with the same code exists for the given animal
         List<Vaccine> vaccineList = this.vaccineRepo.findByCodeAndAnimalId(request.getCode(), request.getAnimal().getId());
-        if(!vaccineList.isEmpty() && vaccineList.get(vaccineList.size()-1).getProtectionFinishDate().isAfter(LocalDate.now())) {
-            throw new CustomException("Bu hastaya " + request.getName() + " aşısı uygulanmış ve koruyuculuk süresi devam ettiğinden sisteme yeniden girilemez!");
+        if (!vaccineList.isEmpty() && vaccineList.get(vaccineList.size() - 1).getProtectionFinishDate().isAfter(LocalDate.now())) {
+            // Throw an exception if the vaccine is already present and its protection period hasn't expired
+            throw new CustomException("A vaccine with code " + request.getCode() + " has already been applied to this animal and its protection period has not expired.");
         } else {
+            // Map the request to a Vaccine entity and save it
             request.setAnimal(this.animalRepo.findById(Math.toIntExact(request.getAnimal().getId())).get());
             Vaccine savedVacine = this.modelMapper.forRequest().map(request, Vaccine.class);
             this.vaccineRepo.save(savedVacine);
             VaccineResponse vaccineResponse = this.modelMapper.forRequest().map(savedVacine, VaccineResponse.class);
-
             return ResultHelper.createData(vaccineResponse);
         }
     }
 
-
-
-
-
-    public List<Vaccine> getVaccinesByProtectionFinishDateRange(LocalDate startDate, LocalDate endDate) {
-        return vaccineRepo.findByProtectionFinishDateBetween(startDate, endDate);
-    }
-
     @Override
     public Optional<Vaccine> get(Long id) {
+        // Retrieve a vaccine by ID or return an empty Optional if not found
         return Optional.ofNullable(this.vaccineRepo.findById(id).orElseThrow(() -> new NotFoundException(Msg.NOT_FOUND_VACCINE)));
     }
 
     @Override
     public Page<Vaccine> cursor(int page, int pageSize) {
-        Pageable pageable = PageRequest.of(page,pageSize);
+        // Retrieve a paginated list of vaccines
+        Pageable pageable = PageRequest.of(page, pageSize);
         return this.vaccineRepo.findAll(pageable);
     }
-
-//    @Override
-//    public ResultData<VaccineResponse> update(Long id, VaccineUpdateRequest request) {
-//        Vaccine vaccine = this.vaccineRepo.findById(id).orElseThrow(() -> new NotFoundException(Msg.NOT_FOUND_VACCINE));
-//        Vaccine updateVaccine = this.modelMapper.forRequest().map(request,Vaccine.class);
-//        updateVaccine.setAnimal(request.getAnimal());
-//        this.vaccineRepo.save(updateVaccine);
-//         VaccineResponse vaccineResponse = this.modelMapper.forResponse().map(updateVaccine,VaccineResponse.class);
-//        vaccineResponse.setAnimal(updateVaccine.getAnimal());
-//         return ResultHelper.successData(vaccineResponse);
-//    }
 
     @Override
     public ResultData<VaccineResponse> update(Long id, VaccineUpdateRequest request) {
@@ -112,40 +96,47 @@ public class VaccineManager implements IVaccineService {
         return ResultHelper.successData(vaccineResponse);
     }
 
-
     @Override
     public boolean delete(Long id) {
+        // Delete a vaccine by ID after ensuring its existence
         this.vaccineRepo.delete(this.vaccineRepo.findById(id).orElseThrow(() -> new NotFoundException(Msg.NOT_FOUND)));
-
         return true;
     }
 
     @Override
     public ResultData<List<VaccineResponse>> vaccineList(LocalDate startDate, LocalDate endDate) {
+        // Retrieve vaccines within the specified date range
         List<Vaccine> allVaccines = this.vaccineRepo.findAll();
         List<Vaccine> upcomings = new ArrayList<>();
-        for(Vaccine obj : allVaccines) {
-            if(startDate.isBefore(obj.getProtectionFinishDate()) && endDate.isAfter(obj.getProtectionFinishDate())) {
+        for (Vaccine obj : allVaccines) {
+            if (startDate.isBefore(obj.getProtectionFinishDate()) && endDate.isAfter(obj.getProtectionFinishDate())) {
                 upcomings.add(obj);
             }
         }
-        if(upcomings.isEmpty()) {
-            throw new NotFoundException("Girilen aralıkta aşı bulunamadı");
+        if (upcomings.isEmpty()) {
+            throw new NotFoundException("No vaccines found within the specified date range.");
         }
-        List<VaccineResponse> vaccineResponseList = upcomings.stream().map(vaccine ->   this.modelMapper.
-                forResponse().map(vaccine,VaccineResponse.class)).collect(Collectors.toList());
-
+        // Map the vaccines to VaccineResponse objects and return them
+        List<VaccineResponse> vaccineResponseList = upcomings.stream().map(vaccine -> this.modelMapper.forResponse().map(vaccine, VaccineResponse.class)).collect(Collectors.toList());
         return ResultHelper.successData(vaccineResponseList);
     }
 
     @Override
     public ResultData<List<VaccineResponse>> findByAnimalId(Long animalID) {
+        // Retrieve vaccines by animal ID
         List<Vaccine> vaccineList = this.vaccineRepo.findByAnimalId(animalID);
-        if(!vaccineList.isEmpty()) {
-            List<VaccineResponse> vaccineResponseList = vaccineList.stream().map(vaccine ->   this.modelMapper.
-                    forResponse().map(vaccine,VaccineResponse.class)).collect(Collectors.toList());
+        if (!vaccineList.isEmpty()) {
+            // Map the vaccines to VaccineResponse objects and return them
+            List<VaccineResponse> vaccineResponseList = vaccineList.stream().map(vaccine -> this.modelMapper.forResponse().map(vaccine, VaccineResponse.class)).collect(Collectors.toList());
             return ResultHelper.successData(vaccineResponseList);
         }
         throw new NotFoundException(Msg.NOT_FOUND);
     }
+
+    // Additional method for retrieving vaccines by protection finish date range
+    @Override
+    public List<Vaccine> getVaccinesByProtectionFinishDateRange(LocalDate startDate, LocalDate endDate) {
+        return vaccineRepo.findByProtectionFinishDateBetween(startDate, endDate);
+    }
 }
+

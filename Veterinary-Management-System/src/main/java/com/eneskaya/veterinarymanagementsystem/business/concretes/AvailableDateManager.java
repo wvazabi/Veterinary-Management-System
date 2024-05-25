@@ -34,13 +34,16 @@ public class AvailableDateManager implements IAvailableDateService {
 
     @Override
     public AvailableDate save(AvailableDateSaveRequest request) {
+        // Check if the doctor exists
         Optional<Doctor> isDoctorExist = this.availableDateRepo.findDoctorByDoctorId(request.getDoctor().getId());
-        if(isDoctorExist.isEmpty()) {
+        if (isDoctorExist.isEmpty()) {
             throw new NotFoundException(Msg.NOT_FOUND_DR + "Doctor ID" + request.getDoctor().getId());
         } else {
+            // Check if the date is already taken
             Optional<AvailableDate> isAvailableDateExist = this.availableDateRepo.findByAvailableDateAndDoctorId(request.getAvailableDate(),
                     request.getDoctor().getId());
-            if(isAvailableDateExist.isEmpty()) {
+            if (isAvailableDateExist.isEmpty()) {
+                // Map and save the available date
                 request.setDoctor(this.doctorRepo.findById(request.getDoctor().getId()).get());
                 AvailableDate saveAvailableDate = this.modelMapper.forRequest().map(request, AvailableDate.class);
                 this.availableDateRepo.save(saveAvailableDate);
@@ -52,28 +55,30 @@ public class AvailableDateManager implements IAvailableDateService {
 
     @Override
     public AvailableDate get(Long id) {
+        // Retrieve an available date by its ID or throw a NotFoundException
         return this.availableDateRepo.findById(id).orElseThrow(() -> new NotFoundException(Msg.NOT_FOUND_AVLB_DATE));
     }
 
-
-
     @Override
     public Page<AvailableDate> cursor(int page, int pageSize) {
-        Pageable pageable = PageRequest.of(page,pageSize);
+        // Retrieve a paginated list of available dates
+        Pageable pageable = PageRequest.of(page, pageSize);
         return this.availableDateRepo.findAll(pageable);
     }
+
     @Override
     public AvailableDate update(AvailableDateUpdateRequest request) {
+        // Check if the doctor exists
         Optional<Doctor> isDoctorExist = this.availableDateRepo.findDoctorByDoctorId(request.getDoctor().getId());
-        if(isDoctorExist.isEmpty()) {
+        if (isDoctorExist.isEmpty()) {
             throw new NotFoundException(Msg.NOT_FOUND_DR + "Doctor ID" + request.getDoctor().getId());
         } else {
+            // Check if the available date exists, then update it
             AvailableDate availableDate = this.availableDateRepo.findById(request.getId()).orElseThrow(() -> new NotFoundException(Msg.NOT_FOUND_AVLB_DATE));
             Optional<AvailableDate> isAvailableDateExist = this.availableDateRepo.findByAvailableDateAndDoctorId(request.getAvailableDate(),
                     request.getDoctor().getId());
-            if(isAvailableDateExist.isEmpty()) {
+            if (isAvailableDateExist.isEmpty()) {
                 request.setDoctor(this.doctorRepo.findById(request.getDoctor().getId()).get());
-
                 AvailableDate saveAvailableDate = this.modelMapper.forRequest().map(request, AvailableDate.class);
                 this.availableDateRepo.save(saveAvailableDate);
                 return saveAvailableDate;
@@ -82,13 +87,12 @@ public class AvailableDateManager implements IAvailableDateService {
         }
     }
 
-
     @Override
     public boolean delete(Long id) {
+        // Delete an available date by its ID
         AvailableDate availableDate = this.get(id);
         this.availableDateRepo.delete(availableDate);
         return true;
     }
-
-
 }
+
