@@ -115,5 +115,8 @@ The software facilitates veterinary clinic operations, including managing veteri
 ![Postman Test](https://github.com/wvazabi/Veterinary-Management-System/blob/main/Images/Postman.png)
 
 ## Veterinary Management System - Project Demonstration Video
-[![Veterinary Management System - Project Demonstration Video](https://img.youtube.com/vi/RtjSzFo8omM/0.jpg)](https://www.youtube.com/watch?v=RtjSzFo8omM)
+## Veterinary Management System - Project Demonstration Videos
+[![Video 1](https://img.youtube.com/vi/RtjSzFo8omM/0.jpg)](https://www.youtube.com/watch?v=RtjSzFo8omM)
+[![Video 2](https://img.youtube.com/vi/wVmxTyzB6iA/0.jpg)](https://www.youtube.com/watch?v=wVmxTyzB6iA)
+
 
