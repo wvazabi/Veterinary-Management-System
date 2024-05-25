@@ -49,7 +49,7 @@ The software facilitates veterinary clinic operations, including managing veteri
 - Manage doctors.
 
 ## UML Diagram
-<img src="https://github.com/wvazabi/Veterinary-Management-System/blob/main/Images/Veterinary%20Management%20System%20UML%20Diagram.png" alt="UML Diagram" width="800" height="400">
+<img src="https://github.com/wvazabi/Veterinary-Management-System/blob/main/Images/Veterinary%20Management%20System%20UML%20Diagram.png" alt="UML Diagram" width="700" height="400">
 
 ## Endpoints
 ### VaccineController
