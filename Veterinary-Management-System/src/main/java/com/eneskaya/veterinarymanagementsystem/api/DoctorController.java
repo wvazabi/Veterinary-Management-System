@@ -62,7 +62,7 @@ public class DoctorController {
     }
 
     // Endpoint to update an existing doctor's address
-    @PutMapping("/address")
+    @PutMapping()
     @ResponseStatus(HttpStatus.OK)
     public ResultData<DoctorResponse> update(@Valid @RequestBody DoctorUpdateRequest doctorUpdateRequest) {
         Doctor updateDoctor = this.modelMapper.forRequest().map(doctorUpdateRequest, Doctor.class);
