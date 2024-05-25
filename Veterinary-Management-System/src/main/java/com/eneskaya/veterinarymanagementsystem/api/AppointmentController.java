@@ -32,11 +32,13 @@ import java.util.stream.Collectors;
 @RequestMapping("/v1/appointments")
 public class AppointmentController {
 
+    // Services injected through constructor dependency injection
     private final IAppointmentService appointmentService;
     private final IDoctorService doctorService;
     private final IAnimalService animalService;
     private final IModelMapperService modelMapper;
 
+    // Constructor for dependency injection
     public AppointmentController(IAppointmentService appointmentService, IDoctorService doctorService, IAnimalService animalService, IModelMapperService modelMapper) {
         this.appointmentService = appointmentService;
         this.doctorService = doctorService;
@@ -44,27 +46,26 @@ public class AppointmentController {
         this.modelMapper = modelMapper;
     }
 
-
-
+    // Endpoint to save a new appointment
     @PostMapping()
     @ResponseStatus(HttpStatus.CREATED)
     public ResultData<AppointmentResponse> save(@Valid @RequestBody AppointmentSaveRequest appointmentSaveRequest) {
         Appointment saveAppointment = this.modelMapper.forRequest().map(appointmentSaveRequest, Appointment.class);
         this.appointmentService.save(saveAppointment);
-        AppointmentResponse appointmentResponse = this.modelMapper.forResponse().map(saveAppointment,AppointmentResponse.class);
+        AppointmentResponse appointmentResponse = this.modelMapper.forResponse().map(saveAppointment, AppointmentResponse.class);
         return ResultHelper.createData(appointmentResponse);
     }
 
-
+    // Endpoint to get an appointment by its ID
     @GetMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
     public ResultData<AppointmentResponse> get(@PathVariable("id") int id) {
         Appointment appointment = this.appointmentService.get(id);
-        AppointmentResponse appointmentResponse = this.modelMapper.forResponse().map(appointment,AppointmentResponse.class);
+        AppointmentResponse appointmentResponse = this.modelMapper.forResponse().map(appointment, AppointmentResponse.class);
         return ResultHelper.successData(appointmentResponse);
     }
 
-
+    // Endpoint to get a paginated list of appointments
     @GetMapping()
     @ResponseStatus(HttpStatus.OK)
     public ResultData<CursorResponse<AppointmentResponse>> cursor(
@@ -77,7 +78,7 @@ public class AppointmentController {
         return ResultHelper.cursor(appointmentResponsePage);
     }
 
-
+    // Endpoint to update an existing appointment
     @PutMapping()
     @ResponseStatus(HttpStatus.OK)
     public ResultData<AppointmentResponse> update(@Valid @RequestBody AppointmentUpdateRequest appointmentUpdateRequest) {
@@ -96,11 +97,9 @@ public class AppointmentController {
         appointmentResponse.setDoctor(doctor);
         appointmentResponse.setAnimal(animal);
         return ResultHelper.successData(appointmentResponse);
-
-
     }
 
-
+    // Endpoint to delete an appointment by its ID
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
     public Result delete(@PathVariable("id") int id) {
@@ -108,19 +107,22 @@ public class AppointmentController {
         return ResultHelper.ok();
     }
 
-    // TODO Appointments are filtered by the date range entered by the user and the doctor.
+    // Endpoint to get appointments by doctor ID and date range
     @GetMapping("/doctor/{doctorId}")
     @ResponseStatus(HttpStatus.OK)
     public ResultData<List<AppointmentResponse>> getAppointmentsByDoctorAndDateRange(
             @PathVariable("doctorId") Long doctorId,
-            @RequestParam(value = "start",required = true, defaultValue = "2024-02-15") LocalDate startDate,
-            @RequestParam(value = "end",required = true, defaultValue = "2025-02-15") LocalDate endDate
+            @RequestParam(value = "start", required = true, defaultValue = "2024-02-15") LocalDate startDate,
+            @RequestParam(value = "end", required = true, defaultValue = "2025-02-15") LocalDate endDate
     ) {
         List<Appointment> appointments = appointmentService.appointmentListByDoctorAndDateRange(doctorId, startDate, endDate);
-        List<AppointmentResponse> appointmentResponses = appointments.stream().map(appointment ->this.modelMapper.forResponse().map(appointment,AppointmentResponse.class)).collect(Collectors.toList());
+        List<AppointmentResponse> appointmentResponses = appointments.stream()
+                .map(appointment -> this.modelMapper.forResponse().map(appointment, AppointmentResponse.class))
+                .collect(Collectors.toList());
         return ResultHelper.successData(appointmentResponses);
     }
 
+    // Endpoint to get appointments by animal ID and date range
     @GetMapping("/animal/{animalId}")
     @ResponseStatus(HttpStatus.OK)
     public ResultData<List<AppointmentResponse>> getAppointmentsByAnimalAndDateRange(
@@ -130,10 +132,9 @@ public class AppointmentController {
     ) {
         List<Appointment> appointments = appointmentService.appointmentListByAnimalAndDateRange(animalId, startDate, endDate);
         List<AppointmentResponse> appointmentResponses = appointments.stream()
-                .map(appointment -> this.modelMapper.forResponse().map(appointment,AppointmentResponse.class))
+                .map(appointment -> this.modelMapper.forResponse().map(appointment, AppointmentResponse.class))
                 .collect(Collectors.toList());
         return ResultHelper.successData(appointmentResponses);
     }
-
-
 }
+
