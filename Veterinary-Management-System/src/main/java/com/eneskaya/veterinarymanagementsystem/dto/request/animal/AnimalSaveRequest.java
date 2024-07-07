@@ -11,8 +11,6 @@ import lombok.NoArgsConstructor;
 import java.time.LocalDate;
 
 @Data
-@AllArgsConstructor
-@NoArgsConstructor
 public class AnimalSaveRequest {
 
     @NotNull(message = "Animal name must not be null")

@@ -13,8 +13,6 @@ import java.util.List;
 @Entity
 @Table(name = "Animal")
 @Data
-@NoArgsConstructor
-@AllArgsConstructor
 public class Animal {
 
     @Id
